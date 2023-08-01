@@ -16,11 +16,18 @@ class Task2Test {
 
     @Test
     fun sendReturnsZero() = runTest {
-        // TODO spustit networkClient.send() a zkontrolovat vysledek
+        assert(networkClient.send() == 0)
     }
 
     @Test
     fun sendAndReturnErrorThrowsError() = runTest {
-        // TODO spustit networkClient).sendAndReturnError() a zkontrolovat vysledek
+        var threwError = false
+        try {
+            networkClient.sendAndReturnError()
+        } catch (e : Exception) {
+            threwError = true
+        }
+
+        assert(threwError)
     }
 }

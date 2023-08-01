@@ -19,6 +19,7 @@ object Versions {
     const val composeVersion = "1.4.3"
     const val composeMaterialVersion = "1.4.3"
     const val composeCompilerVersion = "1.4.7"
+    const val material3Version = "1.1.1"
 
     // support
     const val androidx = "1.10.1"

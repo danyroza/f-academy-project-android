@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import app.futured.academyproject.ui.AppUI
+import app.futured.arkitekt.core.BuildConfig
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
