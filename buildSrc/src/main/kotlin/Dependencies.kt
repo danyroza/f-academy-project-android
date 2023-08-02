@@ -18,9 +18,8 @@ object Dependencies {
         const val foundation = "androidx.compose.foundation:foundation:${Versions.composeVersion}"
         const val foundation_layout = "androidx.compose.foundation:foundation-layout:${Versions.composeVersion}"
         const val material = "androidx.compose.material:material:${Versions.composeMaterialVersion}"
-        const val material3 = "androidx.compose.material3:material3:${Versions.composeMaterial3Version}"
+        const val material3 = "androidx.compose.material3:material3:${Versions.material3Version}"
         const val material_icons_extended = "androidx.compose.material:material-icons-extended:${Versions.composeMaterialVersion}"
-        const val runtime_livedata = "androidx.compose.runtime:runtime-livedata:${Versions.composeVersion}"
         const val runtime = "androidx.compose.runtime:runtime:${Versions.composeVersion}"
         const val ui = "androidx.compose.ui:ui:${Versions.composeVersion}"
         const val ui_tooling = "androidx.compose.ui:ui-tooling:${Versions.composeVersion}"
@@ -75,6 +74,7 @@ object Dependencies {
         const val runner = "androidx.test:runner:${Versions.testRunner}"
         const val junit = "androidx.test.ext:junit-ktx:${Versions.junit}"
         const val mockk = "io.mockk:mockk:${Versions.mockk}"
+        const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
     }
 
     object Lint {

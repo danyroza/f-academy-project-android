@@ -160,14 +160,14 @@ dependencies {
     implementation(Dependencies.Compose.animation)
     implementation(Dependencies.Compose.foundation)
     implementation(Dependencies.Compose.foundation_layout)
-    implementation(Dependencies.Compose.material3)
     implementation(Dependencies.Compose.material_icons_extended)
-    implementation(Dependencies.Compose.runtime_livedata)
     implementation(Dependencies.Compose.runtime)
     implementation(Dependencies.Compose.ui)
     implementation(Dependencies.Compose.ui_tooling)
     implementation(Dependencies.Compose.activity)
     implementation(Dependencies.Compose.constraintLayout)
+    implementation(Dependencies.Compose.material)
+    implementation(Dependencies.Compose.material3)
 
     // MVVM
     implementation(Dependencies.Taste.mvvmCrInteractors)
@@ -198,6 +198,7 @@ dependencies {
     testImplementation(Dependencies.Test.runner)
     testImplementation(Dependencies.Test.junit)
     testImplementation(Dependencies.Test.mockk)
+    testImplementation(Dependencies.Test.coroutines)
 
     androidTestImplementation(Dependencies.Test.core)
     androidTestImplementation(Dependencies.Test.runner)
