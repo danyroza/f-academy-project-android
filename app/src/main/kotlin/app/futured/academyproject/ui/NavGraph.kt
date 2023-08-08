@@ -9,6 +9,7 @@ import app.futured.academyproject.navigation.Destination
 import app.futured.academyproject.navigation.NavigationDestinations
 import app.futured.academyproject.navigation.NavigationDestinationsImpl
 import app.futured.academyproject.navigation.composable
+import app.futured.academyproject.ui.screens.detail.Detail
 import app.futured.academyproject.ui.screens.detail.DetailScreen
 import app.futured.academyproject.ui.screens.home.HomeScreen
 
@@ -25,6 +26,8 @@ fun NavGraph(
             HomeScreen(navigation)
         }
 
-        // TODO: COMPOSE NAVIGATION
+        composable(Destination.Detail) {
+            DetailScreen(navigation)
+        }
     }
 }

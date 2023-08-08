@@ -44,7 +44,7 @@ fun HomeScreen(
     with(viewModel) {
         EventsEffect {
             onEvent<NavigateToDetailEvent> {
-                // TODO: COMPOSE NAVIGATION
+                navigation.navigateToDetailScreen(placeId = it.placeId)
             }
         }
 
@@ -85,7 +85,9 @@ object Home {
                     modifier = Modifier
                         .fillMaxSize(),
                 ) {
-                    // TODO: COMPOSE UI
+                    items(places) {place ->
+                        PlaceItem(place = place)
+                    }
                 }
             },
         )
