@@ -1,6 +1,7 @@
 package app.futured.academyproject.ui.screens.detail
 
 import app.futured.academyproject.domain.GetPlaceFlowUseCase
+import app.futured.academyproject.domain.SetFavouritePlaceUseCase
 import app.futured.academyproject.tools.arch.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
@@ -10,7 +11,7 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     override val viewState: DetailViewState,
     private val getPlaceUseCase: GetPlaceFlowUseCase,
-    // TODO Step 7 - Inject SetFavoritePlaceUseCase
+    private val setFavouritePlaceUseCase: SetFavouritePlaceUseCase
 ) : BaseViewModel<DetailViewState>(), Detail.Actions {
 
     init {
@@ -33,6 +34,11 @@ class DetailViewModel @Inject constructor(
     }
 
     override fun onFavorite() {
+        setFavouritePlaceUseCase.execute(SetFavouritePlaceUseCase.Args(viewState.placeId)) {
+            onError {
+                Timber.e(it)
+            }
+        }
         // TODO Step 8 - Implement onFavorite method
         // Use SetFavoritePlaceUseCase
         // Place id you can find in DetailViewState "viewState.placeId"

@@ -39,5 +39,5 @@ class ApplicationModule {
 
     @Provides
     fun sharedPrefs(@ApplicationContext context: Context): SharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(context)
+        context.getSharedPreferences("MY_PREFERENCES", Context.MODE_PRIVATE)
 }
