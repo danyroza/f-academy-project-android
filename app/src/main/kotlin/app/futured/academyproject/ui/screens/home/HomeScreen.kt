@@ -12,11 +12,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -24,6 +33,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.surfaceColorAtElevation
@@ -115,19 +125,21 @@ object Home {
                     error != null -> {
                         Error(onTryAgain = actions::tryAgain)
                     }
+
                     places.isEmpty() -> {
                         Loading()
                     }
+
                     places.isNotEmpty() -> {
                         LazyColumn(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             contentPadding = innerPadding,
                             verticalArrangement = Arrangement.spacedBy(Grid.d1),
                             modifier = Modifier
-                                .fillMaxSize()
+                                .fillMaxSize(),
                         ) {
                             item {
-                                Row (
+                                Row(
                                     modifier = Modifier
                                         .fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically,
@@ -156,7 +168,7 @@ object Home {
                                                     searchQuery = ""
                                                     keyboardController?.hide()
                                                 }
-                                                .padding(end = 16.dp)
+                                                .padding(end = 16.dp),
                                         )
                                     }
                                 }
@@ -172,6 +184,45 @@ object Home {
                     }
                 }
             },
+            bottomBar = {
+                BottomAppBar(
+                    actions = {
+                        IconButton(onClick = { /* do something */ }) {
+                            Icon(
+                                Icons.Filled.Check,
+                                contentDescription = null,
+                            )
+                        }
+                        IconButton(onClick = { /* do something */ }) {
+                            Icon(
+                                Icons.Filled.Edit,
+                                contentDescription = null,
+                            )
+                        }
+                        IconButton(onClick = { /* do something */ }) {
+                            Icon(
+                                Icons.Filled.Mic,
+                                contentDescription = null,
+                            )
+                        }
+                        IconButton(onClick = { /* do something */ }) {
+                            Icon(
+                                Icons.Filled.Image,
+                                contentDescription = null,
+                            )
+                        }
+                    },
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            onClick = { /* do something */ },
+                            containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                        ) {
+                            Icon(Icons.Filled.Add, "Localized description")
+                        }
+                    },
+                )
+            },
         )
     }
 
@@ -179,7 +230,7 @@ object Home {
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
     private fun HomeTopAppBar(scrollBehavior: TopAppBarScrollBehavior) {
-        LargeTopAppBar(
+        TopAppBar(
             title = {
                 Text(
                     stringResource(R.string.app_map_name),
