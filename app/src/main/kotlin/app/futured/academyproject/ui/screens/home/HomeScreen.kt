@@ -1,13 +1,18 @@
 package app.futured.academyproject.ui.screens.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,18 +23,29 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.futured.academyproject.R
 import app.futured.academyproject.data.model.local.Place
@@ -75,7 +91,7 @@ object Home {
 
     object PreviewActions : Actions
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     @Composable
     fun Content(
         actions: Actions,
@@ -84,6 +100,10 @@ object Home {
         modifier: Modifier = Modifier,
     ) {
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+        var searchQuery by remember { mutableStateOf("") }
+
+        val keyboardController = LocalSoftwareKeyboardController.current
 
         Scaffold(
             modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -104,9 +124,45 @@ object Home {
                             contentPadding = innerPadding,
                             verticalArrangement = Arrangement.spacedBy(Grid.d1),
                             modifier = Modifier
-                                .fillMaxSize(),
+                                .fillMaxSize()
                         ) {
-                            items(places) { place ->
+                            item {
+                                Row (
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    // Search box
+                                    TextField(
+                                        value = searchQuery,
+                                        singleLine = true,
+                                        onValueChange = { newValue ->
+                                            searchQuery = newValue.trim()
+                                        },
+                                        placeholder = {
+                                            Text("Vyhledejte místo")
+                                        },
+                                        modifier = Modifier
+                                            .padding(16.dp)
+                                            .then(if (searchQuery.isEmpty()) Modifier.fillMaxWidth() else Modifier),
+                                    )
+
+                                    if (searchQuery.isNotEmpty()) {
+                                        Icon(
+                                            imageVector = Icons.Default.Clear,
+                                            contentDescription = null,
+                                            modifier = Modifier
+                                                .clickable {
+                                                    searchQuery = ""
+                                                    keyboardController?.hide()
+                                                }
+                                                .padding(end = 16.dp)
+                                        )
+                                    }
+                                }
+                            }
+
+                            items(places.filter { it.name.contains(searchQuery, true) }) { place ->
                                 PlaceCard(
                                     place = place,
                                     onClick = actions::navigateToDetailScreen,
@@ -118,6 +174,7 @@ object Home {
             },
         )
     }
+
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
