@@ -161,7 +161,7 @@ object Home {
                                         value = searchQuery,
                                         singleLine = true,
                                         onValueChange = { newValue ->
-                                            searchQuery = newValue.trim()
+                                            searchQuery = newValue
                                         },
                                         placeholder = {
                                             Text("Vyhledejte místo")
@@ -187,7 +187,8 @@ object Home {
 
                             items(
                                 places
-                                    .filter { it.name.removeDiacritics().contains(searchQuery.removeDiacritics(), true) }
+                                    // FIXME: This line is complex and ugly, refactor it
+                                    .filter { it.name.removeDiacritics().contains(searchQuery.trim().removeDiacritics(), true) }
                                     .let { filteredPlaces ->
                                         when (sortBy) {
                                             SortBy.NAME_ASCENDING -> filteredPlaces.sortedWith(compareBy { czechCollator.getCollationKey(it.name) })
