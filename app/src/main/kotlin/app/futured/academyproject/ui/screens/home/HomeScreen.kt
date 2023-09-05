@@ -193,7 +193,7 @@ object Home {
                                         when (sortBy) {
                                             SortBy.NAME_ASCENDING -> filteredPlaces.sortedWith(compareBy { czechCollator.getCollationKey(it.name) })
                                             SortBy.NAME_DESCENDING -> filteredPlaces.sortedWith(compareByDescending { czechCollator.getCollationKey(it.name) })
-                                            SortBy.CLOSEST -> filteredPlaces // TODO: access location at runtime and estimate distance
+                                            SortBy.CLOSEST -> closestPlaces(filteredPlaces)
                                         }
                                     }
                             ) { place ->
@@ -248,6 +248,15 @@ object Home {
         )
     }
 
+    private fun closestPlaces(filteredPlaces: List<Place>): List<Place> {
+        // TODO
+    }
+
+
+    fun String.removeDiacritics(): String {
+        val normalized = Normalizer.normalize(this, Normalizer.Form.NFD)
+        return normalized.replace(Regex("[^\\p{ASCII}]"), "")
+    }
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
@@ -386,11 +395,6 @@ object Home {
                 }
             }
         }
-    }
-
-    fun String.removeDiacritics(): String {
-        val normalized = Normalizer.normalize(this, Normalizer.Form.NFD)
-        return normalized.replace(Regex("[^\\p{ASCII}]"), "")
     }
 }
 
