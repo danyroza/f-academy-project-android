@@ -72,6 +72,9 @@ import app.futured.academyproject.ui.components.Showcase
 import app.futured.academyproject.ui.theme.Grid
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import java.text.Collator
+import java.text.Normalizer
+import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -116,10 +119,18 @@ object Home {
 
         var searchQuery by remember { mutableStateOf("") }
 
+        var sortBy by remember { mutableStateOf(SortBy.NAME_ASCENDING) }
+
+        val onSortByChange = { newSortBy: SortBy ->
+            sortBy = newSortBy
+        }
+
+        val czechCollator = Collator.getInstance(Locale("cs", "CZ"))
+
         Scaffold(
             modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
-                HomeTopAppBar(scrollBehavior)
+                HomeTopAppBar(scrollBehavior, onSortByChange)
             },
             content = { innerPadding ->
                 when {
@@ -174,7 +185,17 @@ object Home {
                                 }
                             }
 
-                            items(places.filter { it.name.contains(searchQuery, true) }) { place ->
+                            items(
+                                places
+                                    .filter { it.name.removeDiacritics().contains(searchQuery.removeDiacritics(), true) }
+                                    .let { filteredPlaces ->
+                                        when (sortBy) {
+                                            SortBy.NAME_ASCENDING -> filteredPlaces.sortedWith(compareBy { czechCollator.getCollationKey(it.name) })
+                                            SortBy.NAME_DESCENDING -> filteredPlaces.sortedWith(compareByDescending { czechCollator.getCollationKey(it.name) })
+                                            SortBy.CLOSEST -> filteredPlaces // TODO: access location at runtime and estimate distance
+                                        }
+                                    }
+                            ) { place ->
                                 PlaceCard(
                                     place = place,
                                     onClick = actions::navigateToDetailScreen,
@@ -231,6 +252,7 @@ object Home {
     @OptIn(ExperimentalMaterial3Api::class)
     private fun HomeTopAppBar(
         scrollBehavior: TopAppBarScrollBehavior,
+        onSortByChange: (SortBy) -> Unit,
     ) {
         TopAppBar(
             title = {
@@ -249,7 +271,7 @@ object Home {
                 }
             },
             actions = {
-                SortingMenu()
+                SortingMenu(onSortByChange)
             },
             colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.background,
@@ -260,24 +282,33 @@ object Home {
     }
 
     @Composable
-    private fun SortingMenu() {
+    private fun SortingMenu(
+        onSortByChange: (SortBy) -> Unit,
+    ) {
         var isDropdownMenuOpen by remember { mutableStateOf(false) }
 
-        val dropdownItems = listOf("Item 1", "Item 2", "Item 3")
+        val dropdownItems: List<SortItem> = listOf(
+            SortItem("Name ascending", SortBy.NAME_ASCENDING),
+            SortItem("Name descending", SortBy.NAME_DESCENDING),
+            SortItem("Closest to you", SortBy.CLOSEST),
+        )
 
         Box(
             Modifier
-                .wrapContentSize(Alignment.TopEnd)
+                .wrapContentSize(Alignment.TopEnd),
         ) {
-            IconButton(onClick = {
-                isDropdownMenuOpen = true
-            }) {
+            IconButton(
+                onClick = {
+                    isDropdownMenuOpen = true
+                },
+            ) {
                 Icon(
                     Icons.Filled.MoreVert,
-                    contentDescription = "More Menu"
+                    contentDescription = "More Menu",
                 )
             }
         }
+
 
         if (isDropdownMenuOpen) {
             DropdownMenu(
@@ -286,13 +317,28 @@ object Home {
             ) {
                 // Populate the menu items from the list
                 dropdownItems.forEach { item ->
-                    DropdownMenuItem(text = { Text(text = item) }, onClick = { /*TODO*/ })
+                    DropdownMenuItem(
+                        text = { Text(text = item.name) },
+                        onClick = {
+                            isDropdownMenuOpen = false
+                            onSortByChange(item.sortOption)
+                        },
+                    )
                 }
             }
         }
-
     }
 
+    enum class SortBy {
+        NAME_ASCENDING,
+        NAME_DESCENDING,
+        CLOSEST
+    }
+
+    private data class SortItem(
+        val name: String,
+        val sortOption: SortBy,
+    )
 
     @Composable
     private fun Loading() {
@@ -339,6 +385,11 @@ object Home {
                 }
             }
         }
+    }
+
+    fun String.removeDiacritics(): String {
+        val normalized = Normalizer.normalize(this, Normalizer.Form.NFD)
+        return normalized.replace(Regex("[^\\p{ASCII}]"), "")
     }
 }
 
