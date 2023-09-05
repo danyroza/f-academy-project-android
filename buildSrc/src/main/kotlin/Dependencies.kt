@@ -80,4 +80,8 @@ object Dependencies {
     object Lint {
         const val composeLint = "com.slack.lint.compose:compose-lint-checks:${Versions.composeLint}"
     }
+
+    object Location {
+        const val location = "com.google.android.gms:play-services-location:${Versions.location}"
+    }
 }

@@ -206,4 +206,7 @@ dependencies {
 
     // Lint
     lintChecks(Dependencies.Lint.composeLint)
+
+    // Location
+    implementation(Dependencies.Location.location)
 }
