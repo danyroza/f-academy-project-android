@@ -1,5 +1,10 @@
 package app.futured.academyproject.ui.screens.home
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +25,7 @@ import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
@@ -40,6 +46,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,11 +55,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.futured.academyproject.R
 import app.futured.academyproject.data.model.local.Place
@@ -60,6 +69,7 @@ import app.futured.academyproject.navigation.NavigationDestinations
 import app.futured.academyproject.tools.arch.EventsEffect
 import app.futured.academyproject.tools.arch.onEvent
 import app.futured.academyproject.tools.compose.ScreenPreviews
+import app.futured.academyproject.tools.extensions.removeDiacritics
 import app.futured.academyproject.tools.preview.PlacesProvider
 import app.futured.academyproject.ui.components.PlaceCard
 import app.futured.academyproject.ui.components.Showcase
@@ -82,6 +92,13 @@ fun HomeScreen(
             }
         }
 
+        RememberLocationPermissionState(
+            onGrant = viewModel::onAllowedLocationPermission,
+            onDeny = {
+                viewModel.loadCulturalPlaces()
+            },
+        )
+
         Home.Content(
             viewModel,
             viewState.places,
@@ -97,6 +114,10 @@ object Home {
         fun navigateToDetailScreen(placeId: Int) = Unit
 
         fun tryAgain() = Unit
+
+        fun onAllowedLocationPermission() = Unit
+
+        fun loadCulturalPlaces() = Unit
     }
 
     object PreviewActions : Actions
@@ -187,9 +208,9 @@ object Home {
                                         when (sortBy) {
                                             SortBy.NAME_ASCENDING -> filteredPlaces.sortedWith(compareBy { czechCollator.getCollationKey(it.name) })
                                             SortBy.NAME_DESCENDING -> filteredPlaces.sortedWith(compareByDescending { czechCollator.getCollationKey(it.name) })
-                                            SortBy.CLOSEST -> closestPlaces(filteredPlaces)
+                                            SortBy.CLOSEST -> filteredPlaces.sortedBy { it.distance }
                                         }
-                                    }
+                                    },
                             ) { place ->
                                 PlaceCard(
                                     place = place,
@@ -244,11 +265,6 @@ object Home {
 
     private fun closestPlaces(filteredPlaces: List<Place>): List<Place> {
         return filteredPlaces
-    }
-
-    fun String.removeDiacritics(): String {
-        val normalized = Normalizer.normalize(this, Normalizer.Form.NFD)
-        return normalized.replace(Regex("[^\\p{ASCII}]"), "")
     }
 
     @Composable
@@ -306,7 +322,7 @@ object Home {
                 },
             ) {
                 Icon(
-                    Icons.Filled.MoreVert,
+                    Icons.Filled.Sort,
                     contentDescription = "More Menu",
                 )
             }
@@ -387,6 +403,49 @@ object Home {
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun RememberLocationPermissionState(
+    onGrant: () -> Unit,
+    onDeny: () -> Unit,
+) {
+    val launcherMultiplePermissions = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions(),
+    ) { permissions ->
+        when {
+            permissions.getOrDefault(ACCESS_FINE_LOCATION, false) ||
+                permissions.getOrDefault(ACCESS_COARSE_LOCATION, false) -> {
+                onGrant()
+            }
+
+            else -> {
+                onDeny()
+            }
+        }
+    }
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit) {
+        val permissions = arrayOf(
+            ACCESS_COARSE_LOCATION,
+            ACCESS_FINE_LOCATION,
+        )
+
+        if (
+            permissions.all {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    it,
+                ) == PackageManager.PERMISSION_GRANTED
+            }
+        ) {
+            onGrant()
+        } else {
+            launcherMultiplePermissions.launch(permissions)
         }
     }
 }
