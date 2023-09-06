@@ -259,7 +259,33 @@ private fun RememberLocationPermissionState(
     onDeny()
     // TODO 2: Create a rememberLauncherForActivityResult for RequestMultiplePermissions
 
+    val launcherMultiplePermissions = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+    ) { permissions ->
+        when {
+            permissions.getOrDefault(ACCESS_COARSE_LOCATION, false) || permissions.getOrDefault(ACCESS_FINE_LOCATION, false) -> {
+                // TODO
+            } else -> {
+                // TODO
+            }
+        }
+    }
+
     // TODO 3: Create a LocalContext.current
+
+    val context = LocalContext.current
+    
+    LaunchedEffect(key1 = Unit) {
+        val permissions = arrayOf(
+            ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION
+        )
+
+        if (permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED}) {
+            onGrant()
+        } else {
+            launcherMultiplePermissions.launch(permissions)
+        }
+    }
 
     //TODO 4: Create a LaunchedEffect with permission check
     // - Check if all permissions are granted

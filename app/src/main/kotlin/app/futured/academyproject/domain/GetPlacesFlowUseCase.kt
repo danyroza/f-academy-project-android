@@ -23,6 +23,6 @@ class GetPlacesFlowUseCase @Inject constructor(
         culturePlaces.features.map {
             val isFavoritePlace = it.properties.ogcFid in favouritePlaceIds
             it.mapToPlace(isFavoritePlace, args)
-        }
+        }.sortedBy { it.distance }
     }
 }

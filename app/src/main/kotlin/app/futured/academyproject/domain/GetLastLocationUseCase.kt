@@ -17,6 +17,10 @@ class GetLastLocationUseCase @Inject constructor(
         // 1. get location manager from context
         // 2. get last known location from location manager
         // 3. return last known location
-        return null
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+
+        val lastLocation = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+        return lastLocation
     }
 }
