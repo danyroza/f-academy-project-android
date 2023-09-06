@@ -60,7 +60,4 @@ object Versions {
 
     // lint
     const val composeLint = "1.0.1"
-
-    // location
-    const val location = "18.0.0"
 }
