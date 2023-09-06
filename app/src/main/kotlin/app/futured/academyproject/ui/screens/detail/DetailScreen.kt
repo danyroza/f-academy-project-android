@@ -69,11 +69,6 @@ object Detail {
                 TopAppBar(
                     title = { Text(text = "DetailScreen") },
                     actions = {
-                        // TODO Step 9 - Implement UI - add Icon button with right icon and tint color
-                        // When place is favorite use Icons.Filled.Favorite icon and MaterialTheme.colorScheme.error color
-                        // When place is not favorite use Icons.Filled.FavoriteBorder icon and MaterialTheme.colorScheme.onSurface color
-                        // Use IconButton component
-                        // Use on click listener onFavorite (Hint: onClick = actions::onFavorite)
                         var isFavourite = place?.isFavourite
                         var (icon, color) = if (isFavourite == true) {
                             Icons.Filled.Favorite to MaterialTheme.colorScheme.error

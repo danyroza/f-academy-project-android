@@ -39,10 +39,5 @@ class DetailViewModel @Inject constructor(
                 Timber.e(it)
             }
         }
-        // TODO Step 8 - Implement onFavorite method
-        // Use SetFavoritePlaceUseCase
-        // Place id you can find in DetailViewState "viewState.placeId"
-
-        // Don't worry - change is automatically observed in GetPlaceFlowUseCase
     }
 }

@@ -31,12 +31,6 @@ class ApplicationModule {
         }
     }
 
-    // TODO Step 1 - provide SharedPreferences reference
-    // Create method that provides SP reference. You can use default or your own
-    // Hint: You need to use @Provides and @ApplicationContext annotations as above
-    // Hint: for default sharedPrefs use: PreferenceManager.getDefaultSharedPreferences(context)
-    // Hint: for your own sharedPrefs use: context.getSharedPreferences("MY_SHARED_PREFS_NAME", Context.MODE_PRIVATE)
-
     @Provides
     fun sharedPrefs(@ApplicationContext context: Context): SharedPreferences =
         context.getSharedPreferences("MY_PREFERENCES", Context.MODE_PRIVATE)
