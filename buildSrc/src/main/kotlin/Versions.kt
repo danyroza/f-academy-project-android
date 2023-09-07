@@ -1,7 +1,6 @@
 @file:Suppress("StringLiteralDuplication")
 
 object Versions {
-
     // gradle
     const val androidGradlePlugin = "8.0.2"
 
@@ -19,6 +18,7 @@ object Versions {
     const val composeMaterialVersion = "1.4.3"
     const val composeMaterial3Version = "1.2.0-alpha02"
     const val composeCompilerVersion = "1.4.7"
+    const val lazyColumnScroll = "1.7.2"
 
     // support
     const val androidx = "1.10.1"

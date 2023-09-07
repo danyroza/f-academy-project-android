@@ -168,6 +168,7 @@ dependencies {
     implementation(Dependencies.Compose.ui_tooling)
     implementation(Dependencies.Compose.activity)
     implementation(Dependencies.Compose.constraintLayout)
+    implementation(Dependencies.Compose.lazyColumnScroll)
 
     // MVVM
     implementation(Dependencies.Taste.mvvmCrInteractors)

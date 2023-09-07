@@ -26,6 +26,7 @@ object Dependencies {
         const val ui_tooling = "androidx.compose.ui:ui-tooling:${Versions.composeVersion}"
         const val activity = "androidx.activity:activity-compose:${Versions.activity}"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:${Versions.constraintLayout}"
+        const val lazyColumnScroll = "com.github.nanihadesuka:LazyColumnScrollbar:${Versions.lazyColumnScroll}"
     }
 
     object Support {

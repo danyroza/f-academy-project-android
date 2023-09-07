@@ -5,6 +5,7 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,10 +13,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
@@ -54,6 +58,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -76,6 +81,7 @@ import app.futured.academyproject.ui.components.Showcase
 import app.futured.academyproject.ui.theme.Grid
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import my.nanihadesuka.compose.LazyColumnScrollbar
 import java.text.Collator
 import java.text.Normalizer
 import java.util.Locale
@@ -142,6 +148,8 @@ object Home {
 
         val czechCollator = Collator.getInstance(Locale("cs", "CZ"))
 
+        val listState = rememberLazyListState()
+
         Scaffold(
             modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
@@ -158,64 +166,71 @@ object Home {
                     }
 
                     places.isNotEmpty() -> {
-                        LazyColumn(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            contentPadding = innerPadding,
-                            verticalArrangement = Arrangement.spacedBy(Grid.d1),
-                            modifier = Modifier
-                                .fillMaxSize(),
+                        LazyColumnScrollbar(
+                            listState = listState,
+                            thumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            thumbSelectedColor = MaterialTheme.colorScheme.surfaceTint
                         ) {
-                            item {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    // Search box
-                                    TextField(
-                                        value = searchQuery,
-                                        singleLine = true,
-                                        onValueChange = { newValue ->
-                                            searchQuery = newValue
-                                        },
-                                        placeholder = {
-                                            Text("Vyhledejte místo")
-                                        },
+                            LazyColumn(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                contentPadding = innerPadding,
+                                verticalArrangement = Arrangement.spacedBy(Grid.d1),
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                state = listState,
+                            ) {
+                                item {
+                                    Row(
                                         modifier = Modifier
-                                            .padding(16.dp)
-                                            .then(if (searchQuery.isEmpty()) Modifier.fillMaxWidth() else Modifier),
-                                    )
-
-                                    if (searchQuery.isNotEmpty()) {
-                                        Icon(
-                                            imageVector = Icons.Default.Clear,
-                                            contentDescription = null,
+                                            .fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        // Search box
+                                        TextField(
+                                            value = searchQuery,
+                                            singleLine = true,
+                                            onValueChange = { newValue ->
+                                                searchQuery = newValue
+                                            },
+                                            placeholder = {
+                                                Text("Vyhledejte místo")
+                                            },
                                             modifier = Modifier
-                                                .clickable {
-                                                    searchQuery = ""
-                                                }
-                                                .padding(end = 16.dp),
+                                                .padding(16.dp)
+                                                .then(if (searchQuery.isEmpty()) Modifier.fillMaxWidth() else Modifier),
                                         )
+
+                                        if (searchQuery.isNotEmpty()) {
+                                            Icon(
+                                                imageVector = Icons.Default.Clear,
+                                                contentDescription = null,
+                                                modifier = Modifier
+                                                    .clickable {
+                                                        searchQuery = ""
+                                                    }
+                                                    .padding(end = 16.dp),
+                                            )
+                                        }
                                     }
                                 }
-                            }
 
-                            items(
-                                places
-                                    // FIXME: This line is complex and ugly, refactor it
-                                    .filter { it.name.removeDiacritics().contains(searchQuery.trim().removeDiacritics(), true) }
-                                    .let { filteredPlaces ->
-                                        when (sortBy) {
-                                            SortBy.NAME_ASCENDING -> filteredPlaces.sortedWith(compareBy { czechCollator.getCollationKey(it.name) })
-                                            SortBy.NAME_DESCENDING -> filteredPlaces.sortedWith(compareByDescending { czechCollator.getCollationKey(it.name) })
-                                            SortBy.CLOSEST -> filteredPlaces.sortedBy { it.distance }
-                                        }
-                                    },
-                            ) { place ->
-                                PlaceCard(
-                                    place = place,
-                                    onClick = actions::navigateToDetailScreen,
-                                )
+                                items(
+                                    places
+                                        // FIXME: This line is complex and ugly, refactor it
+                                        .filter { it.name.removeDiacritics().contains(searchQuery.trim().removeDiacritics(), true) }
+                                        .let { filteredPlaces ->
+                                            when (sortBy) {
+                                                SortBy.NAME_ASCENDING -> filteredPlaces.sortedWith(compareBy { czechCollator.getCollationKey(it.name) })
+                                                SortBy.NAME_DESCENDING -> filteredPlaces.sortedWith(compareByDescending { czechCollator.getCollationKey(it.name) })
+                                                SortBy.CLOSEST -> filteredPlaces.sortedBy { it.distance }
+                                            }
+                                        },
+                                ) { place ->
+                                    PlaceCard(
+                                        place = place,
+                                        onClick = actions::navigateToDetailScreen,
+                                    )
+                                }
                             }
                         }
                     }
