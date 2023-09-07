@@ -193,7 +193,7 @@ object Home {
                                                 searchQuery = newValue
                                             },
                                             placeholder = {
-                                                Text("Vyhledejte místo")
+                                                Text(stringResource(R.string.search_place))
                                             },
                                             modifier = Modifier
                                                 .padding(16.dp)

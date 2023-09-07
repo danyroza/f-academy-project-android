@@ -18,7 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import app.futured.academyproject.R
 import app.futured.academyproject.data.model.local.Place
 import app.futured.academyproject.navigation.NavigationDestinations
 import app.futured.academyproject.tools.arch.EventsEffect
@@ -67,7 +69,7 @@ object Detail {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "DetailScreen") },
+                    title = { Text(stringResource(R.string.detail_title)) },
                     actions = {
                         var isFavourite = place?.isFavourite
                         var (icon, color) = if (isFavourite == true) {

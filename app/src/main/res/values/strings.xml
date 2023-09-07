@@ -7,4 +7,6 @@
     <string name="error_unauthorized">Nejste přihlášení a to byste měli.</string>
 
     <string name="app_map_name">Davidova Kultůromapa</string>
+    <string name="search_place">Vyhledat místo</string>
+    <string name="detail_title">Detail místa</string>
 </resources>
