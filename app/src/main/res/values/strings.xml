@@ -6,7 +6,10 @@
     <string name="error_general_server_error">Něco se pokazilo a ne na vašem přijímači. Zkuste to později.</string>
     <string name="error_unauthorized">Nejste přihlášení a to byste měli.</string>
 
-    <string name="app_map_name">Davidova Kultůromapa</string>
+    <string name="app_map_name">Danielova KulturMapka</string>
     <string name="search_place">Vyhledat místo</string>
     <string name="detail_title">Detail místa</string>
+    <string name="sort_name_ascending">Jméno vzestupně</string>
+    <string name="sort_name_descending">Jméno sestupně</string>
+    <string name="sort_distance_closest">Nejbližší</string>
 </resources>

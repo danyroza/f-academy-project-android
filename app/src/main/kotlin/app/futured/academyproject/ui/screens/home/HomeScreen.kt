@@ -322,9 +322,9 @@ object Home {
         var isDropdownMenuOpen by remember { mutableStateOf(false) }
 
         val dropdownItems: List<SortItem> = listOf(
-            SortItem("Name ascending", SortBy.NAME_ASCENDING),
-            SortItem("Name descending", SortBy.NAME_DESCENDING),
-            SortItem("Closest to you", SortBy.CLOSEST),
+            SortItem(stringResource(id = R.string.sort_name_ascending), SortBy.NAME_ASCENDING),
+            SortItem(stringResource(id = R.string.sort_name_descending), SortBy.NAME_DESCENDING),
+            SortItem(stringResource(id = R.string.sort_distance_closest), SortBy.CLOSEST),
         )
 
         Box(
