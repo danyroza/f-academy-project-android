@@ -228,10 +228,6 @@ object Home {
         )
     }
 
-    private fun closestPlaces(filteredPlaces: List<Place>): List<Place> {
-        return filteredPlaces
-    }
-
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
     private fun HomeTopAppBar(
