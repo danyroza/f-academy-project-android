@@ -11,6 +11,7 @@ import app.futured.academyproject.navigation.NavigationDestinationsImpl
 import app.futured.academyproject.navigation.composable
 import app.futured.academyproject.ui.screens.detail.DetailScreen
 import app.futured.academyproject.ui.screens.home.HomeScreen
+import app.futured.academyproject.ui.screens.reviews.ReviewsScreen
 
 @Composable
 fun NavGraph(
@@ -27,6 +28,10 @@ fun NavGraph(
 
         composable(Destination.Detail) {
             DetailScreen(navigation)
+        }
+
+        composable(Destination.Reviews){
+            ReviewsScreen(navigation)
         }
     }
 }

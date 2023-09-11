@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import java.sql.Time
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneOffset
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,7 +34,7 @@ class ReviewsPersistence @Inject constructor(
 
     fun addReview(review: Review) {
         if (review.timeCreated == null){
-            review.timeCreated = LocalDateTime.now()
+            review.timeCreated = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
         }
         val newReviews = getReviews() + review
         setReviews(newReviews)

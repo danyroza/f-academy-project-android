@@ -1,7 +1,9 @@
 package app.futured.academyproject.data.model.local
 
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
+@Serializable
 data class Review (
     val reviewId: Int,
     val reviewedPlaceId: Int,
@@ -9,6 +11,6 @@ data class Review (
     val reviewPlaceName: String,
     val stars: Int,
     val description: String,
-    val timeVisited: LocalDateTime,
-    var timeCreated: LocalDateTime? = null,
+    val timeVisited: Long,
+    var timeCreated: Long? = null,
 )

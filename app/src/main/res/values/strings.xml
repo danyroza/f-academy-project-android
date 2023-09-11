@@ -12,4 +12,6 @@
     <string name="sort_name_ascending">Jméno vzestupně</string>
     <string name="sort_name_descending">Jméno sestupně</string>
     <string name="sort_distance_closest">Nejbližší</string>
+    <string name="reviews_title">Hodnocení míst</string>
+    <string name="no_reviews_message">Zatím nemáte žádné recenze.</string>
 </resources>

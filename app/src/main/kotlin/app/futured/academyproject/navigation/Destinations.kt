@@ -32,6 +32,8 @@ sealed class Destination(
         fun buildRoute(placeId: Int): String = route
             .withArgument(PLACE_ID, placeId.toString())
     }
+
+    object Reviews : Destination(route = "reviews")
 }
 
 /**
