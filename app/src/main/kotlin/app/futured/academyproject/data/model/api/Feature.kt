@@ -45,4 +45,6 @@ fun Feature.mapToPlace(isFavourite: Boolean, location: Location? = null) = Place
         )
         results[0]
     },
+    brnoPass = properties.brnoPass?.lowercase() == "ano",
+    inOperation = properties.inOperation.lowercase() == "ano",
 )
