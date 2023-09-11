@@ -1,8 +1,6 @@
 package app.futured.academyproject
 
 import android.app.Application
-import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity

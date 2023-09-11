@@ -1,6 +1,5 @@
 package app.futured.academyproject.domain
 
-import android.location.Location
 import app.futured.academyproject.data.model.local.Review
 import app.futured.academyproject.data.persistence.ReviewsPersistence
 import app.futured.arkitekt.crusecases.FlowUseCase

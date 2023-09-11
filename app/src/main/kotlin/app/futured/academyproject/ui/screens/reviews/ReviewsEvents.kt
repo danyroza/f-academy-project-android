@@ -1,6 +1,5 @@
 package app.futured.academyproject.ui.screens.reviews
 
-import app.futured.academyproject.ui.screens.home.HomeViewState
 import app.futured.arkitekt.core.event.Event
 
 

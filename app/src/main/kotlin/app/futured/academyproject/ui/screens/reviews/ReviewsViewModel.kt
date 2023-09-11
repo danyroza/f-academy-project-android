@@ -1,18 +1,12 @@
 package app.futured.academyproject.ui.screens.reviews
 
-import androidx.navigation.NavController
 import app.futured.academyproject.data.model.local.Review
 import app.futured.academyproject.domain.CreateReviewFlowUseCase
-import app.futured.academyproject.domain.GetPlaceFlowUseCase
 import app.futured.academyproject.domain.GetReviewsFlowUseCase
-import app.futured.academyproject.navigation.Destination
 import app.futured.academyproject.tools.arch.BaseViewModel
-import app.futured.academyproject.ui.screens.home.NavigateToDetailEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.Month
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
