@@ -20,7 +20,7 @@ class ReviewsViewModel @Inject constructor(
 ) : BaseViewModel<ReviewsViewState>(), Reviews.Actions {
 
     override fun navigateToDetailScreen(placeId: Int) {
-        sendEvent(app.futured.academyproject.ui.screens.reviews.NavigateToDetailEvent(placeId))
+        sendEvent(NavigateToDetailEvent(placeId))
     }
     override fun loadReviews() {
         getReviewsFlowUseCase.execute {

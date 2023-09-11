@@ -100,8 +100,8 @@ object Detail {
                 TopAppBar(
                     title = { Text(stringResource(R.string.detail_title)) },
                     actions = {
-                        var isFavourite = place?.isFavourite
-                        var (icon, color) = if (isFavourite == true) {
+                        val isFavourite = place?.isFavourite
+                        val (icon, color) = if (isFavourite == true) {
                             Icons.Filled.Favorite to MaterialTheme.colorScheme.error
                         } else {
                             Icons.Filled.FavoriteBorder to MaterialTheme.colorScheme.onSurface
@@ -198,10 +198,11 @@ fun InfoRow(
     text: String,
     intent: Intent,
     icon: ImageVector,
+    modifier: Modifier = Modifier,
 ) {
-    var context = LocalContext.current
+    val context = LocalContext.current
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clip(shape = RoundedCornerShape(12.dp))
