@@ -16,9 +16,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import app.futured.academyproject.data.model.local.Review
 import app.futured.academyproject.ui.theme.Grid
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ReviewCard(review: Review, onClick: (Int) -> Unit, modifier: Modifier = Modifier) {
+
+    // FIXME: This should be somewhere else as a common helper function
+    fun convertEpochTimeToReadableFormat(epochTime: Long): String {
+        val localDateTime = LocalDateTime.ofInstant(
+            Instant.ofEpochSecond(epochTime),
+            ZoneOffset.UTC
+        )
+
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+        return localDateTime.format(formatter)
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -34,6 +50,7 @@ fun ReviewCard(review: Review, onClick: (Int) -> Unit, modifier: Modifier = Modi
                 .padding(vertical = Grid.d2, horizontal = Grid.d4),
         ) {
             Column {
+                Text(text = convertEpochTimeToReadableFormat(review.timeVisited), style = MaterialTheme.typography.labelSmall)
                 Text(
                     text = review.reviewPlaceName,
                     style = MaterialTheme.typography.titleMedium,
@@ -44,7 +61,7 @@ fun ReviewCard(review: Review, onClick: (Int) -> Unit, modifier: Modifier = Modi
                 Spacer(modifier = Modifier.height(Grid.d1))
                 Row {
                     Text(
-                        text = review.description.take(30) + "...",
+                        text = review.description.take(36) + "...",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
