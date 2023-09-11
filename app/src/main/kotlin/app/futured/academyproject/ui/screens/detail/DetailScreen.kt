@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.futured.academyproject.R
@@ -210,14 +211,15 @@ fun InfoRow(
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clip(shape = RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.inverseOnSurface)
-            .padding(horizontal = 8.dp),
+            .padding(start = 16.dp, end = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         SelectionContainer {
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.W800
             )
         }
         IconButton(
