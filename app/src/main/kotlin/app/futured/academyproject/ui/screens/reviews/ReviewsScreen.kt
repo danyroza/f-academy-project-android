@@ -32,10 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import app.futured.academyproject.R
 import app.futured.academyproject.data.model.local.Review
 import app.futured.academyproject.navigation.NavigationDestinations
-import app.futured.academyproject.tools.arch.EventsEffect
-import app.futured.academyproject.tools.arch.onEvent
+import app.futured.academyproject.ui.components.BottomAppBar
 import app.futured.academyproject.ui.components.ReviewCard
-import app.futured.academyproject.ui.screens.home.NavigateToDetailEvent
 import app.futured.academyproject.ui.theme.Grid
 import kotlinx.collections.immutable.PersistentList
 import my.nanihadesuka.compose.LazyColumnScrollbar
@@ -46,23 +44,15 @@ fun ReviewsScreen(
     viewModel: ReviewsViewModel = hiltViewModel(),
 ) {
     with(viewModel) {
-        EventsEffect {
-            onEvent<NavigateToDetailEvent> {
-                navigation.navigateToDetailScreen(placeId = it.placeId)
-            }
-        }
-
         viewModel.loadReviews()
 
-        Reviews.Content(viewModel, viewModel.viewState.reviews)
+        Reviews.Content(viewModel, viewModel.viewState.reviews, navigation)
     }
 }
 
 object Reviews {
     interface Actions {
         fun loadReviews() = Unit
-
-        fun navigateToDetailScreen(placeId: Int) = Unit
 
         fun createNewReview() = Unit
     }
@@ -72,6 +62,7 @@ object Reviews {
     fun Content(
         actions: Actions,
         reviews: PersistentList<Review>,
+        navigation: NavigationDestinations,
         modifier: Modifier = Modifier,
     ) {
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -135,7 +126,7 @@ object Reviews {
                                 items(reviews) { review ->
                                     ReviewCard(
                                         review,
-                                        onClick = actions::navigateToDetailScreen,
+                                        onClick = { /* TODO navigate to review detail */},
                                     )
                                 }
                             }
@@ -152,6 +143,9 @@ object Reviews {
                     Icon(Icons.Filled.Add, "Localized description")
                 }
             },
+            bottomBar = {
+                BottomAppBar(navigation)
+            }
         )
     }
 }

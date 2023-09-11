@@ -53,14 +53,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import app.futured.academyproject.R
 import app.futured.academyproject.data.model.local.Place
 import app.futured.academyproject.navigation.NavigationDestinations
+import app.futured.academyproject.navigation.NavigationDestinationsImpl
 import app.futured.academyproject.tools.arch.EventsEffect
 import app.futured.academyproject.tools.arch.onEvent
 import app.futured.academyproject.tools.compose.ScreenPreviews
 import app.futured.academyproject.tools.extensions.removeDiacritics
 import app.futured.academyproject.tools.preview.PlacesProvider
+import app.futured.academyproject.ui.components.BottomAppBar
 import app.futured.academyproject.ui.components.PlaceCard
 import app.futured.academyproject.ui.components.Showcase
 import app.futured.academyproject.ui.theme.Grid
@@ -93,6 +96,7 @@ fun HomeScreen(
             viewModel,
             viewState.places,
             viewState.error,
+            navigation
         )
     }
 }
@@ -118,6 +122,7 @@ object Home {
         actions: Actions,
         places: PersistentList<Place>,
         error: Throwable?,
+        navigation: NavigationDestinations,
         modifier: Modifier = Modifier,
     ) {
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -220,6 +225,9 @@ object Home {
                     }
                 }
             },
+            bottomBar = {
+                BottomAppBar(navigation)
+            }
         )
     }
 
@@ -414,6 +422,7 @@ private fun HomeContentPreview(@PreviewParameter(PlacesProvider::class) places: 
             Home.PreviewActions,
             places,
             error = null,
+            navigation = NavigationDestinationsImpl(rememberNavController())
         )
     }
 }
@@ -426,6 +435,7 @@ private fun HomeContentWithErrorPreview() {
             Home.PreviewActions,
             places = persistentListOf(),
             error = IllegalStateException("Test"),
+            navigation = NavigationDestinationsImpl(rememberNavController())
         )
     }
 }
@@ -438,6 +448,7 @@ private fun HomeContentWithLoadingPreview() {
             Home.PreviewActions,
             places = persistentListOf(),
             error = null,
+            navigation = NavigationDestinationsImpl(rememberNavController())
         )
     }
 }

@@ -19,9 +19,6 @@ class ReviewsViewModel @Inject constructor(
     val createReviewFlowUseCase: CreateReviewFlowUseCase,
 ) : BaseViewModel<ReviewsViewState>(), Reviews.Actions {
 
-    override fun navigateToDetailScreen(placeId: Int) {
-        sendEvent(NavigateToDetailEvent(placeId))
-    }
     override fun loadReviews() {
         getReviewsFlowUseCase.execute {
             onNext {
