@@ -4,6 +4,9 @@ import app.futured.academyproject.data.model.local.Review
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.sql.Time
+import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,5 +29,13 @@ class ReviewsPersistence @Inject constructor(
     fun setReviews(reviews: List<Review>) {
         persistence[REVIEW_IDS_KEY] = reviews
         reviewsFlow.value = reviews
+    }
+
+    fun addReview(review: Review) {
+        if (review.timeCreated == null){
+            review.timeCreated = LocalDateTime.now()
+        }
+        val newReviews = getReviews() + review
+        setReviews(newReviews)
     }
 }
